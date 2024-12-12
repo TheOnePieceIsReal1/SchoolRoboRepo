@@ -17,17 +17,17 @@ public class StarterBot2025TeleOpJava extends LinearOpMode {
     private DcMotor rightDrive = null;
     private DcMotor arm = null;
     private DcMotor wrist = null;
-    private Servo claw = null;
-    private CRServo intake = null;
+    private CRServo claw = null;
+    private Servo intake = null;
 
     // Arm and Wrist target positions for each state
-    private static final int ARM_POSITION_INIT = 300;
-    private static final int ARM_POSITION_INTAKE = 10000;
-    private static final int ARM_POSITION_WALL_GRAB = 1100;
-    private static final int ARM_POSITION_WALL_UNHOOK = 1700;
-    private static final int ARM_POSITION_HOVER_HIGH = 2600;
-    private static final int ARM_POSITION_CLIP_HIGH = 2100;
-    private static final int ARM_POSITION_LOW_BASKET = 2500;
+    private static final int ARM_POSITION_INIT = 0;
+    private static final int ARM_POSITION_INTAKE = 0;
+    private static final int ARM_POSITION_WALL_GRAB = 0;
+    private static final int ARM_POSITION_WALL_UNHOOK = 0;
+    private static final int ARM_POSITION_HOVER_HIGH = 0;
+    private static final int ARM_POSITION_CLIP_HIGH = 0;
+    private static final int ARM_POSITION_LOW_BASKET = 0;
 
     private static final int WRIST_POSITION_INIT = 0;
     private static final int WRIST_POSITION_SAMPLE = 270;
@@ -70,14 +70,18 @@ public void runOpMode() {
         rightDrive = hardwareMap.get(DcMotor.class, "motorL");
         arm = hardwareMap.get(DcMotor.class, "uArmMotor");
         wrist = hardwareMap.get(DcMotor.class, "lArmMotor");
-        claw = hardwareMap.get(Servo.class, "intake");
-        intake = hardwareMap.get(CRServo.class, "y");
+        claw = hardwareMap.get(CRSServo.class, "y");
+        intake = hardwareMap.get(Servo.class, "intake");
+        linearSlide = hardwareMap.get(Servo.class, "ExtenderMotor");
+        LinearSlideAngle = hardwareMap.get(Servo.class, "ExtenderAngle");
 
         // Stop and reset encoders
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wrist.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LinearSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LinearSlideAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Set motors to use encoders
         leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -91,6 +95,7 @@ public void runOpMode() {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -98,29 +103,25 @@ public void runOpMode() {
 
     while (opModeIsActive()) {
         // Direct control of arm and wrist
-        if (gamepad1.dpad_up) {
-            targetArm += 10;
+        /*if (gamepad1.dpad_up) {
+            targetWrist += 3;
         } else if (gamepad1.dpad_down) {
-            targetArm -= 10;
+            targetWrist -= 3;
         }
-
         if (gamepad1.dpad_left) {
             targetWrist += 1;
         } else if (gamepad1.dpad_right) {
             targetWrist -= 1;
-        }
+        }*/
 
         // Claw control
-        if (gamepad1.right_bumper) {
-            clawOpen = !clawOpen;
-            claw.setPosition(clawOpen ? CLAW_OPEN_POSITION : CLAW_CLOSED_POSITION);
-        }
+      
 
         // Intake control
         if (gamepad1.right_trigger > 0.1) {
-            intake.setPower(5.0);
+            intake.setPower(5);
         } else if (gamepad1.left_trigger > 0.1) {
-            intake.setPower(-5.0);
+            intake.setPower(-5);
         } else {
             intake.setPower(0);
         }
@@ -132,10 +133,10 @@ public void runOpMode() {
                
             } else if (gamepad1.dpad_up){ //manual control
                 currentState = RobotState.MANUAL;
-                targetArm += 1;
+                targetArm += 3;
             } else if (gamepad1.dpad_down){
                 currentState = RobotState.MANUAL;
-                targetArm -= 1;
+                targetArm -= 3;
             } else if (gamepad1.dpad_left){
                 currentState = RobotState.MANUAL;
                 targetWrist += 1;
