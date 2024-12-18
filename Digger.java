@@ -172,11 +172,11 @@ public class StarterBot2025TeleOpJava extends LinearOpMode {
             // Set target positions and power for arm and wrist
             arm.setTargetPosition(targetArm);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setPower(1.0);
+            arm.setPower(1);
 
             wrist.setTargetPosition(targetWrist);
             wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            wrist.setPower(1.0);
+            wrist.setPower(1);
 
             // Send telemetry data
             telemetry.addData("Linear Slide Power", linearSlide.getPower());
