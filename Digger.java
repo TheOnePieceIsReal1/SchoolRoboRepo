@@ -105,14 +105,20 @@ public class StarterBot2025TeleOpJava extends LinearOpMode {
 
         while (opModeIsActive()) {
             // Direct control of arm and wrist
-            if (gamepad1.dpad_up) {
-                targetWrist += 3;
-            } else if (gamepad1.dpad_down) {
-                targetWrist -= 3;
-            }
-            if (gamepad1.dpad_left) {
+            if (gamepad1.a) {
+                currentState = RobotState.MANUAL;
+               
+            } else if (gamepad1.dpad_up){ //manual control
+                currentState = RobotState.MANUAL;
+                targetArm += 3;
+            } else if (gamepad1.dpad_down){
+                currentState = RobotState.MANUAL;
+                targetArm -= 3;
+            } else if (gamepad1.dpad_left){
+                currentState = RobotState.MANUAL;
                 targetWrist += 1;
-            } else if (gamepad1.dpad_right) {
+            } else if (gamepad1.dpad_right){
+                currentState = RobotState.MANUAL;
                 targetWrist -= 1;
             }
 
@@ -166,11 +172,11 @@ public class StarterBot2025TeleOpJava extends LinearOpMode {
             // Set target positions and power for arm and wrist
             arm.setTargetPosition(targetArm);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setPower(1);
+            arm.setPower(1.0);
 
             wrist.setTargetPosition(targetWrist);
             wrist.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            wrist.setPower(1);
+            wrist.setPower(1.0);
 
             // Send telemetry data
             telemetry.addData("Linear Slide Power", linearSlide.getPower());
