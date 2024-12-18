@@ -69,7 +69,7 @@ public class StarterBot2025TeleOpJava extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "motorL");
         arm = hardwareMap.get(DcMotor.class, "uArmMotor");
         wrist = hardwareMap.get(DcMotor.class, "lArmMotor");
-        claw = hardwareMap.get(CRSServo.class, "y");
+        claw = hardwareMap.get(CRServo.class, "y");
         intake = hardwareMap.get(Servo.class, "intake");
         linearSlide = hardwareMap.get(DcMotor.class, "ExtenderMotor"); // Initialize linear slide motor
         rotationMotor = hardwareMap.get(DcMotor.class, "ExtenderAngle"); // Initialize rotation motor
